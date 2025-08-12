@@ -1,0 +1,30 @@
+.cartContainer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+}
+
+.amount {
+  color: #1976d2;
+  font-weight: bold;
+}
+
+.icon {
+  margin-left: 8px;
+  font-size: 18px;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #1976d2;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
