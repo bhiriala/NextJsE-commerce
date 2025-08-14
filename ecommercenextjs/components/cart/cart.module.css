@@ -5,11 +5,13 @@
   padding: 8px 12px;
   border: 1px solid #ddd;
   background: #f9f9f9;
+  color: rgb(72, 69, 69);
 }
 
 .amount {
   color: #1976d2;
   font-weight: bold;
+
 }
 
 .icon {

@@ -14,7 +14,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #f8f9fa ;
     --foreground: #ededed;
   }
 }
@@ -85,6 +85,31 @@ body {
   border-bottom: 2px solid #5a88ca;
   transition: all 0.3s ease-in-out;
 }
+.blackStyle{
+  color: rgb(72, 69, 69);
+}
+
+.promo-area .zigzag-bottom, .brands-area .zigzag-bottom{background: #f4f4f4}
+.single-promo {
+    font-size: 25px;
+    font-weight: 600;
+    padding: 20px 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    color: #f4f4f4;
+    align-items: center;
+}
+.single-promo i {
+  font-size: 50px;
+}
+
+.single-promo:hover {color: #fff;background: #222;}
+.promo1 { background:#5a88ca;}
+.promo2 { background:#ffd900;}
+.promo3 { background:#fa8072;}
+.promo4 { background:#4abebd;}
+.single-promo {margin-bottom: 30px}   
 
 @keyframes fadeInOut {
   0% { opacity: 0; }

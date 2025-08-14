@@ -3,53 +3,40 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import styles from "./navigationBar.module.css";
 
-export default function Navbar() {
-  const [categories, setCategories] = useState([]);
+export default function Navbar({categories}) {
   const pathname = usePathname();
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/categories");
-        if (!response.ok) {
-          throw new Error("Erreur lors du chargement des catégories");
-        }
-        const data = await response.json();
-        setCategories(data);
-      } catch (error) {
-        console.error("Erreur :", error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
   const isActive = (href) => pathname === href;
 
   return (
-    <div className="mainmenu-area" style={{ marginLeft: "12.3rem" }}>
+    <div className="mainmenu-area">
       <div className="container">
         <div className="row">
-          <div className="navbar">
-            <ul className="nav navbar-nav navbar-expand">
-              <li>
-                <Link href="/" className={isActive("/") ? "active" : ""}>
+          <nav className={styles.navbar}>
+            <ul className={styles.navList}>
+              <li className={styles.navItem}>
+                <Link
+                  href="/"
+                  className={`${styles.navLink} ${isActive("/") ? styles.active : ""}`}
+                >
                   Home
                 </Link>
               </li>
               {categories.map((category) => (
-                <li key={category.id}>
+                <li key={category.id} className={styles.navItem}>
                   <Link
                     href={`/products/${category.productListId}`}
-                    className={isActive(`/products/${category.productListId}`) ? "active" : ""}
+                    className={`${styles.navLink} ${
+                      isActive(`/products/${category.productListId}`) ? styles.active : ""
+                    }`}
                   >
                     {category.name}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
         </div>
       </div>
     </div>

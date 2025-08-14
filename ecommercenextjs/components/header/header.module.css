@@ -2,10 +2,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 3rem;
   background-color: #f8f9fa ;
-  width: 76%;
-  margin-left: 13rem;
+  width: 80%;
+  margin-left: 8rem;
 }
 
 .branding {
@@ -15,6 +15,7 @@
 }
 
 .logoLink {
+  margin-right: -1.2rem;
   display: block;
   width: 150px;
   height: 150px;

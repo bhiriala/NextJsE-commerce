@@ -4,6 +4,7 @@
   max-width: 550px;
   height: 55px;
   align-items: center;
+  color: rgb(0, 0, 0);
 }
 
 .searchInput {

@@ -19,8 +19,6 @@ export default async function NavigationBar() {
     const categories = await getCategories();
 
     return (
-        <>
         <Navbar categories={categories} />
-        </>
     );
 }

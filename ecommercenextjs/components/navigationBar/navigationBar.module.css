@@ -1,0 +1,42 @@
+.navbar {
+  display: flex;
+  margin-left: 16rem;
+  
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  gap: 3.2rem; 
+}
+
+.navItem {
+  font-size: 14.3px;
+  position: relative;
+  
+}
+
+.navLink {
+  text-transform: uppercase;
+  color: #676666;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: rgb(39, 39, 39);
+}
+
+.active {
+  font-weight: bold;
+}
+
+.active::after {
+  content: "";
+  position: absolute;
+  left: -0.27rem;
+  bottom: -4px;
+  width: 120%;
+  height: 2px;
+  background-color: #0070f3;
+}

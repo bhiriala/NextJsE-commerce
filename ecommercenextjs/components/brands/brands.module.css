@@ -1,0 +1,32 @@
+.brandsArea {
+  padding: 40px 0;
+  background: #f8f9fa ;
+}
+
+.zigzagBottom {
+  height: 1px;
+  background: #c2c2c2;
+}
+
+.brandWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.brandList {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  align-items: center;
+  justify-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.brandItem {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
