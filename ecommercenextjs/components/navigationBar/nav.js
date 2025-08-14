@@ -8,6 +8,9 @@ import styles from "./navigationBar.module.css";
 export default function Navbar({categories}) {
   const pathname = usePathname();
   const isActive = (href) => pathname === href;
+  if(pathname === "/cart" || pathname === "/checkout") {
+    return <></>;
+  }
 
   return (
     <div className="mainmenu-area">

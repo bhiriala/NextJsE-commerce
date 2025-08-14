@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'font-awesome/css/font-awesome.min.css';
 
 :root {
   --background: #f8f9fa ;
@@ -62,6 +63,220 @@ body {
 
 .read-the-docs {
   color: #888;
+}
+
+.single-product-widget, .footer-about-us, .footer-menu {
+  margin-bottom: 60px;
+}
+.single-product-widget {
+    position: relative;
+}
+/* .single-product-widget {
+  background-color: #fff;
+} */
+.sidebar-title {
+    color: #fead53;
+    font-size: 25px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+.product-wid-title {
+  font-family: raleway;
+  font-size: 30px;
+  font-weight: 100;
+  margin-bottom: 40px;
+}
+/* .product-wid-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+} */
+.product-wid-title2 {
+    font-family: raleway;
+    font-size: 30px;
+    font-weight: 100;
+    margin-bottom: 40px;
+    color: rgb(238, 184, 84);
+  }
+.wid-view-more {
+    background: none repeat scroll 0 0 #5a88ca;
+    color: #fff;
+    padding: 3px 15px;
+    position: absolute;
+    right: 10px;
+    top: 3px;
+    margin-right: 1rem;
+    border-color: #5a88ca;
+}
+/* .wid-view-more {
+  background-color: #4a74b5;
+  border: none;
+  padding: 6px 12px;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 15px;
+} */
+
+.wid-view-more:hover {color: #fff;background-color: #222;text-decoration: none}
+/* .single-wid-product {
+    margin-bottom: 31px;
+    overflow: hidden;
+} */
+.single-wid-product {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+ .product-image {
+  flex-shrink: 0; 
+}
+.product-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-info h2 {
+  font-size: 14px;
+  margin: 0;
+  font-weight: normal;
+}
+
+.single-wid-product h2 {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+.single-wid-product h2 a {
+    color: #222;
+}
+.single-wid-product h2 a:hover, .single-product h2 a:hover {
+    color: #5a88ca;
+}
+.product-wid-rating {
+    color: #ffc808;
+    margin-bottom: 10px;
+}
+.product-wid-price ins {
+    color: #5a88ca;
+    font-weight: 700;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.single-shop-product h2 {
+    font-size: 20px;
+    margin: 10px 0;
+}
+.single-shop-product {
+  margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+}
+div.cart-collaterals ul.products li.product .price {
+    color: #333;
+    display: block;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.product-carousel-price ins {
+  color: #5a88ca;
+  font-weight: 700;
+  margin-right: 5px;
+  text-decoration: none;
+}
+.product-option-shop {
+    margin-top: 15px;
+
+}
+.add_to_cart_button {
+    background: none repeat scroll 0 0 #5a88ca;
+    border: medium none;
+    color: #fff;
+    padding: 6px 25px;display: inline-block
+}
+.add_to_cart_button:hover {background-color: #222;color: #fff;text-decoration: none}
+/* .product-wid-price ins {
+  color: #0070f3;
+  margin-right: 5px;
+} */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+  margin-left: 21rem;
+}
+.product-big-title-area {
+  background: url(../assets/img/crossword.png) repeat scroll 0 0 #5a88ca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+.product-bit-title h2 {
+  font-size: 35px;
+  padding: 40px 0;
+}  
+.product-bit-title h2 {
+  font-family: raleway;
+  font-size: 50px;
+  font-weight: 200;
+  margin: 0;
+  padding: 50px 0;color: #fff;
+}
+.productBrand-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 50px;
+  margin-left: 21rem;
+}
+
+@media (max-width: 1024px) {
+  .productBrand-grid {
+    grid-template-columns: repeat(2, 1fr);
+    margin-left: 5rem; 
+    gap: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .productBrand-grid {
+    grid-template-columns: 1fr;
+    margin-left: 0;
+    gap: 20px;
+  }
+}
+
+
+.product-column {
+  background: transparent; /* ou autre */
+}
+
+
+
+
+
+
+
+
+.product-thumb {
+  object-fit: contain;
+}
+
+.product-wid-rating i {
+  font-size: 14px;
+}
+
+
+
+.product-wid-price del {
+  color: #888;
+  font-size: 14px;
 }
 
 .popup {

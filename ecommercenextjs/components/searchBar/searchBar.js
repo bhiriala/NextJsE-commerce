@@ -9,12 +9,13 @@ export default function SearchBar() {
   const router = useRouter();
   const pathname = usePathname();
   if (pathname === "/cart" || pathname === "/checkout") return null;
+  console.log(query)
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const q = query.trim();
     if (!q) return;
-    router.push(`/search?q=${encodeURIComponent(q)}`);
+    router.push(`/search/${encodeURIComponent(q)}`);
     setQuery("");
   };
 
