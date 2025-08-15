@@ -6,7 +6,6 @@ import Promo from "@/components/promo/promo";
 export default function HomePage() {
   return (
     <div>
-     <NavigationBar />
      <CarrouselSwiper/> 
      <Promo/>
      <Brands/>

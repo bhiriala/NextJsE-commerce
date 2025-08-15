@@ -14,7 +14,7 @@ export default function Navbar({categories}) {
 
   return (
     <div className="mainmenu-area">
-      <div className="container">
+  
         <div className="row">
           <nav className={styles.navbar}>
             <ul className={styles.navList}>
@@ -41,7 +41,7 @@ export default function Navbar({categories}) {
             </ul>
           </nav>
         </div>
-      </div>
+      
     </div>
   );
 }

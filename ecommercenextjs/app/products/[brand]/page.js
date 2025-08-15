@@ -32,16 +32,14 @@ export default async function ProductList({ params }) {
                                 const substring = i !== -1 ? prod.imageName.slice(0, i) : "";
                                 console.log("Image substring:", substring);
                                 console.log("Image name:", prod.imageName);
+                                console.log("productooo",prod)
                                 
 
                                 return (
                                     <Product
+                                        prod={prod}
                                         key={index}
-                                        img={`${substring}/${prod.imageName}`}
-                                        price={prod.price}
-                                        name={prod.name}
-                                        discount={prod.discountRate}
-                                        id={prod.id}
+                                        img={`/assets/produts-img/${substring}/${prod.imageName}`}
                                     />
                                 );
                             })

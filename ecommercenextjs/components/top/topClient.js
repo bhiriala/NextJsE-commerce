@@ -8,6 +8,25 @@ export default function TopClient({ name, listProd: initialList }) {
   const pathname = usePathname();
   const [listProd, setListProd] = useState(initialList);
   const [threeProducts, setThreeProducts] = useState(true);
+const addRecentlyViewed = (product) => {
+        let recentlyViewed = [];
+        const stored = localStorage.getItem("RecentlyViewed");
+        if (stored) {
+            try {
+                recentlyViewed = JSON.parse(stored);
+                if (!Array.isArray(recentlyViewed)) {
+                    recentlyViewed = [];
+                }
+            } catch (error) {
+                console.error("Erreur lors du parsing du localStorage :", error);
+                recentlyViewed = [];
+            }
+        }
+        recentlyViewed = recentlyViewed.filter(item => item.id !== product.id);
+        recentlyViewed.unshift(product);
+        localStorage.setItem("RecentlyViewed", JSON.stringify(recentlyViewed));
+    };
+  
 
   useEffect(() => {
     if (name === "Recently Viewed") {
@@ -23,6 +42,7 @@ export default function TopClient({ name, listProd: initialList }) {
     setThreeProducts((prev) => !prev);
   }
   console.log(displayedProducts)
+  
 
   return (
   <div className="product-column">
@@ -57,6 +77,15 @@ export default function TopClient({ name, listProd: initialList }) {
             <div className="product-info">
               <h2>
                 <Link href={`/productDetails/${prod.id}`}>{prod.name}</Link>
+
+                {/* <Link
+                        href={`/productDetails/${props.prod.id}`}
+                        style={{ color: pathname === "/cart" ? "black" : "" }}
+                        onClick={() => addRecentlyViewed(props.prod)}
+                    >
+                        {props.prod.name}
+                    </Link> */}
+
               </h2>
               <div className="product-wid-rating">
                 {Array.from({ length: prod.review }).map((_, i) => (
