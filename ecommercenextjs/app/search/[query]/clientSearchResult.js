@@ -30,12 +30,9 @@ export default function ClientSearchResult({ products }) {
        return (
             
                 <Product
+                prod={prod}
                 key={index}
                 img={imgName}
-                price={prod.price}
-                name={prod.name}
-                discount={prod.discountRate}
-                id={prod.id}
                 />
            
             );

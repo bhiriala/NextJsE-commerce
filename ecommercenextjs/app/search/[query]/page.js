@@ -38,5 +38,6 @@ async function fetchProducts(query) {
 export default async function SearchResult({ params }) {
   const query = params.query || "";
   const products = await fetchProducts(query);
+  console.log("ahawaaaa",products)
   return <ClientSearchResult products={products} />;
 }

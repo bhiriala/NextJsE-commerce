@@ -7,8 +7,9 @@ export default function Cart() {
   const { items } = useSelector((state) => state.cart);
   
   const totalAmount = items
-    .reduce((acc, item) => acc + item.price * item.quantity, 0)
+    .reduce((acc, item) => acc + (item.price * (1 - (item.discountRate / 100)))*item.quantity, 0)
     .toFixed(2);
+    // {(product.price * (1 - (product.discountRate / 100))).toFixed(2)}
     
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
