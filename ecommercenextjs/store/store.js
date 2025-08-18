@@ -1,11 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit';
-import cartReducer from './cartSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import cartReducer from "./cartSlice";
 
-export function makeStore(preloadedState = undefined) {
-  return configureStore({
-    reducer: {
-      cart: cartReducer,
-    },
-    preloadedState,
-  });
-}
+export const store = configureStore({
+  reducer: {
+    cart: cartReducer,
+  },
+});
+export default store;

@@ -2,32 +2,56 @@
 
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { updateQuantity, removeItem } from "@/store/cartSlice";
+import { updateItemQuantity, removeItemFromCart, createCart } from "@/store/cartSlice";
 
 export default function CartTableItem({ item }) {
   const dispatch = useDispatch();
+  const storeCartId = useSelector((state) => state.cart?.cartId);
   const itemInStore = useSelector((state) =>
-    (state.cart.items || []).find((i) => String(i.id) === String(item.id))
+    (state.cart?.cartData?.items || []).find((i) => String(i.id) === String(item.id))
   );
 
-  const qty = Number(itemInStore?.quantity ?? item.quantity ?? 1);
+  const qty = Number(itemInStore?.qty ?? item?.qty ?? 1);
   const priceRaw = Number(item.price ?? 0);
   const discountRate = Number(item.discountRate ?? 0);
   const unitPrice = priceRaw * (1 - discountRate / 100);
   const subtotal = unitPrice * qty;
 
-  const handleIncrease = () => {
-    dispatch(updateQuantity({ id: item.id, quantity: qty + 1 }));
+  const ensureCartId = async () => {
+    let cartId = storeCartId || (typeof window !== "undefined" ? localStorage.getItem("cartId") : null);
+    if (!cartId) {
+      const createdId = await dispatch(createCart()).unwrap();
+      cartId = createdId;
+    }
+    return cartId;
   };
 
-  const handleDecrease = () => {
-    if (qty > 1) {
-      dispatch(updateQuantity({ id: item.id, quantity: qty - 1 }));
+  const handleIncrease = async () => {
+    try {
+      const cartId = await ensureCartId();
+      await dispatch(updateItemQuantity({ cartId, itemId: item.id, qty: qty + 1 })).unwrap();
+    } catch (err) {
+      console.error("Impossible d'augmenter la quantité :", err);
     }
   };
 
-  const handleDelete = () => {
-    dispatch(removeItem(item.id));
+  const handleDecrease = async () => {
+    if (qty <= 1) return;
+    try {
+      const cartId = await ensureCartId();
+      await dispatch(updateItemQuantity({ cartId, itemId: item.id, qty: qty - 1 })).unwrap();
+    } catch (err) {
+      console.error("Impossible de diminuer la quantité :", err);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const cartId = await ensureCartId();
+      await dispatch(removeItemFromCart({ cartId, itemId: item.id })).unwrap();
+    } catch (err) {
+      console.error("Impossible de supprimer l'article :", err);
+    }
   };
 
   return (
@@ -37,7 +61,13 @@ export default function CartTableItem({ item }) {
           type="button"
           className="remove"
           onClick={handleDelete}
-          style={{ backgroundColor: "rgb(206,84,84)", color: "white", border: "none", padding: "6px 8px", cursor: "pointer" }}
+          style={{
+            backgroundColor: "rgb(206,84,84)",
+            color: "white",
+            border: "none",
+            padding: "6px 8px",
+            cursor: "pointer",
+          }}
           aria-label="Supprimer l'article"
         >
           ×
@@ -66,8 +96,13 @@ export default function CartTableItem({ item }) {
       </td>
 
       <td className="product-quantity">
-        <div className="quantity buttons_added" style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <button type="button" className="minus" onClick={handleDecrease} aria-label="Diminuer quantité">-</button>
+        <div
+          className="quantity buttons_added"
+          style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+        >
+          <button type="button" className="minus" onClick={handleDecrease} aria-label="Diminuer quantité">
+            -
+          </button>
 
           <input
             type="number"
@@ -81,7 +116,9 @@ export default function CartTableItem({ item }) {
             style={{ width: 60, textAlign: "center" }}
           />
 
-          <button type="button" className="plus" onClick={handleIncrease} aria-label="Augmenter quantité">+</button>
+          <button type="button" className="plus" onClick={handleIncrease} aria-label="Augmenter quantité">
+            +
+          </button>
         </div>
       </td>
 

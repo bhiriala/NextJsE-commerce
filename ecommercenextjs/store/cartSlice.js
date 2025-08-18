@@ -1,68 +1,198 @@
-import { createSlice } from '@reduxjs/toolkit';
+// /Redux/cartSlice.js
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const initialState = {
-  items: [],
-  total: 0,
-  count: 0,
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+// Helper: safe access localStorage
+const getLocal = (key) => {
+  if (typeof window === "undefined") return null;
+  try { return localStorage.getItem(key); } catch { return null; }
+};
+const setLocal = (key, value) => {
+  if (typeof window === "undefined") return;
+  try { localStorage.setItem(key, value); } catch {}
 };
 
-const computeTotals = (items) => {
-  let total = 0;
-  let count = 0;
-  for (const i of items) {
-    const q = Number(i.quantity || 1);
-    total += Number(i.price || 0) * q;
-    count += q;
+export const createCart = createAsyncThunk(
+  "cart/createCart",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${API_URL}/carts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ total: 0, subTotal: 0, tax: 0, items: [] }),
+      });
+      if (!response.ok) throw new Error("Erreur lors de la création du panier");
+      const result = await response.json();
+
+      // only on client
+      setLocal("cartId", result.id);
+      setLocal("cart", JSON.stringify(result));
+      if (!getLocal("RecentlyViewed")) setLocal("RecentlyViewed", JSON.stringify([]));
+
+      return result.id;
+    } catch (err) {
+      return rejectWithValue(err.message || "Erreur createCart");
+    }
   }
-  return { total, count };
-};
+);
+
+export const fetchCartData = createAsyncThunk(
+  "cart/fetchCartData",
+  async (cartId, { rejectWithValue }) => {
+    try {
+      // prefer param cartId, otherwise try localStorage
+      const id = cartId || (getLocal("cartId") ? getLocal("cartId") : null);
+      if (!id) throw new Error("cartId manquant");
+
+      const response = await fetch(`${API_URL}/carts/${id}`);
+      if (!response.ok) throw new Error("Erreur lors du chargement du panier");
+      const data = await response.json();
+
+      // sync localStorage
+      setLocal("cart", JSON.stringify(data));
+      setLocal("cartId", id);
+
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message || "Erreur fetchCartData");
+    }
+  }
+);
+
+export const updateItemQuantity = createAsyncThunk(
+  "cart/updateItemQuantity",
+  async ({ cartId, itemId, qty }, { rejectWithValue }) => {
+    try {
+      if (typeof window === "undefined") throw new Error("Opération côté client uniquement");
+      let cart = JSON.parse(getLocal("cart"));
+      if (!cart) throw new Error("Panier introuvable");
+
+      const itemToUpdate = cart.items.find((i) => i.id === itemId);
+      if (!itemToUpdate) throw new Error("Article non trouvé");
+
+      itemToUpdate.qty = qty;
+      cart.total = cart.items.reduce((total, i) => total + (i.price * (1 - (i.discountRate || 0) / 100)) * i.qty, 0);
+      cart.subTotal = cart.total;
+
+      setLocal("cart", JSON.stringify(cart));
+
+      const updateResponse = await fetch(`${API_URL}/carts/${cartId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cart),
+      });
+
+      if (!updateResponse.ok) throw new Error("Erreur mise à jour du panier");
+      const updated = await updateResponse.json();
+      setLocal("cart", JSON.stringify(updated));
+      return updated;
+    } catch (err) {
+      return rejectWithValue(err.message || "Erreur updateItemQuantity");
+    }
+  }
+);
+
+export const addToCart = createAsyncThunk(
+  "cart/addToCart",
+  async ({ cartId, item }, { rejectWithValue }) => {
+    try {
+      if (typeof window === "undefined") throw new Error("Opération côté client uniquement");
+      let cart = JSON.parse(getLocal("cart"));
+      if (!cart) throw new Error("Panier introuvable");
+
+      const existingItem = cart.items.find((i) => i.id === item.id);
+      if (existingItem) existingItem.qty += item.qty;
+      else cart.items.push(item);
+
+      cart.total = cart.items.reduce((total, i) => total + (i.price * (1 - (i.discountRate || 0) / 100)) * i.qty, 0);
+      cart.subTotal = cart.total;
+      setLocal("cart", JSON.stringify(cart));
+
+      const updateResponse = await fetch(`${API_URL}/carts/${cartId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cart),
+      });
+      if (!updateResponse.ok) throw new Error("Erreur lors de l'ajout au panier");
+      const updated = await updateResponse.json();
+      setLocal("cart", JSON.stringify(updated));
+      return updated;
+    } catch (err) {
+      return rejectWithValue(err.message || "Erreur addToCart");
+    }
+  }
+);
+
+export const removeItemFromCart = createAsyncThunk(
+  "cart/removeItemFromCart",
+  async ({ cartId, itemId }, { rejectWithValue }) => {
+    try {
+      if (typeof window === "undefined") throw new Error("Opération côté client uniquement");
+      let cart = JSON.parse(getLocal("cart"));
+      if (!cart) throw new Error("Panier introuvable");
+
+      cart.items = cart.items.filter((item) => item.id !== itemId);
+      cart.total = cart.items.reduce((total, item) => total + (item.price * (1 - (item.discountRate || 0) / 100)) * item.qty, 0);
+      cart.subTotal = cart.total;
+      setLocal("cart", JSON.stringify(cart));
+
+      const updateResponse = await fetch(`${API_URL}/carts/${cartId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cart),
+      });
+      if (!updateResponse.ok) throw new Error("Erreur suppression article");
+      const updated = await updateResponse.json();
+      setLocal("cart", JSON.stringify(updated));
+      return updated;
+    } catch (err) {
+      return rejectWithValue(err.message || "Erreur removeItemFromCart");
+    }
+  }
+);
 
 const cartSlice = createSlice({
-  name: 'cart',
-  initialState,
+  name: "cart",
+  initialState: {
+    cartId: null,
+    cartData: null,
+    loading: false,
+    error: null,
+  },
   reducers: {
-    setCart(state, action) {
-      state.items = action.payload;
-      const t = computeTotals(state.items);
-      state.total = t.total;
-      state.count = t.count;
+    // action utile si tu veux initialiser depuis client sans thunk
+    setCartFromLocal(state, action) {
+      state.cartId = action.payload?.cartId ?? state.cartId;
+      state.cartData = action.payload?.cartData ?? state.cartData;
     },
-    addItem(state, action) {
-      const item = action.payload;
-      const idx = state.items.findIndex(i => i.id === item.id);
-      if (idx >= 0) {
-        state.items[idx].quantity = (Number(state.items[idx].quantity) || 1) + (Number(item.quantity) || 1);
-      } else {
-        state.items.push({...item, quantity: Number(item.quantity) || 1});
-      }
-      const t = computeTotals(state.items);
-      state.total = t.total;
-      state.count = t.count;
-    },
-    updateQuantity(state, action) {
-      const { id, quantity } = action.payload;
-      const idx = state.items.findIndex(i => i.id === id);
-      if (idx >= 0) {
-        state.items[idx].quantity = Number(quantity);
-      }
-      const t = computeTotals(state.items);
-      state.total = t.total;
-      state.count = t.count;
-    },
-    removeItem(state, action) {
-      const id = action.payload;
-      state.items = state.items.filter(i => i.id !== id);
-      const t = computeTotals(state.items);
-      state.total = t.total;
-      state.count = t.count;
-    },
-    clearCart(state) {
-      state.items = [];
-      state.total = 0;
-      state.count = 0;
-    }
+  },
+  extraReducers: (builder) => {
+    // createCart
+    builder
+      .addCase(createCart.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(createCart.fulfilled, (state, action) => { state.loading = false; state.cartId = action.payload; })
+      .addCase(createCart.rejected, (state, action) => { state.loading = false; state.error = action.payload || action.error?.message; })
+
+      // fetchCartData
+      .addCase(fetchCartData.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(fetchCartData.fulfilled, (state, action) => { state.loading = false; state.cartData = action.payload; state.error = null; state.cartId = action.payload?.id ?? state.cartId; })
+      .addCase(fetchCartData.rejected, (state, action) => { state.loading = false; state.error = action.payload || action.error?.message; })
+
+      // update / add / remove
+      .addCase(updateItemQuantity.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(updateItemQuantity.fulfilled, (state, action) => { state.loading = false; state.cartData = action.payload; })
+      .addCase(updateItemQuantity.rejected, (state, action) => { state.loading = false; state.error = action.payload || action.error?.message; })
+
+      .addCase(addToCart.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(addToCart.fulfilled, (state, action) => { state.loading = false; state.cartData = action.payload; })
+      .addCase(addToCart.rejected, (state, action) => { state.loading = false; state.error = action.payload || action.error?.message; })
+
+      .addCase(removeItemFromCart.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(removeItemFromCart.fulfilled, (state, action) => { state.loading = false; state.cartData = action.payload; })
+      .addCase(removeItemFromCart.rejected, (state, action) => { state.loading = false; state.error = action.payload || action.error?.message; });
   },
 });
 
-export const { addItem, removeItem, updateQuantity, clearCart, setCart } = cartSlice.actions;
+export const { setCartFromLocal } = cartSlice.actions;
 export default cartSlice.reducer;

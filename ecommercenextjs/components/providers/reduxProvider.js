@@ -1,43 +1,39 @@
+// components/redux/ReduxProvider.js
 "use client";
 
-import { useMemo, useEffect } from "react";
-import { Provider } from "react-redux";
-import { makeStore } from "@/store/store";
-import { setCart } from "@/store/cartSlice";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { store } from "@/store/store"; // adapte le chemin si besoin
+import { useEffect } from "react";
+import { createCart,fetchCartData } from "@/store/cartSlice";
+
+function ClientInit({ children }) {
+  const dispatch = useDispatch();
+  const cartId = useSelector((s) => s.cart.cartId);
+
+  useEffect(() => {
+    // lecture sûre du localStorage côté client
+    const storedCartId = typeof window !== "undefined" ? localStorage.getItem("cartId") : null;
+
+    // Priorité : si on a un cartId dans le store utiliser celui-là (ex : après createCart)
+    if (!storedCartId && !cartId) {
+      dispatch(createCart());
+    } else if (storedCartId && !cartId) {
+      // on a un id en localStorage -> récupérer le panier
+      dispatch(fetchCartData(storedCartId));
+    } else if (cartId) {
+      // si cartId déjà dans le store -> refresh des données
+      dispatch(fetchCartData(cartId));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
+  return children;
+}
 
 export default function ReduxProvider({ children }) {
-  const preloaded = useMemo(() => {
-    try {
-      const raw = localStorage.getItem("cart");
-      const items = raw ? JSON.parse(raw) : [];
-      return { cart: { items, ...(() => {
-        let total=0,count=0;
-        (items || []).forEach(it => { const q=Number(it.quantity||1); total+=Number(it.price||0)*q; count+=q; });
-        return { total, count };
-      })() } };
-    } catch (e) {
-      return undefined;
-    }
-  }, []);
-
-  const store = useMemo(() => makeStore(preloaded), [preloaded]);
-  useEffect(() => {
-    const unsubscribe = store.subscribe(() => {
-      const state = store.getState();
-      try {
-        localStorage.setItem("cart", JSON.stringify(state.cart.items));
-      } catch {}
-    });
-    return unsubscribe;
-  }, [store]);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem("cart");
-      const items = raw ? JSON.parse(raw) : [];
-      store.dispatch(setCart(items));
-    } catch {}
-  }, [store]);
-
-  return <Provider store={store}>{children}</Provider>;
+  return (
+    <Provider store={store}>
+      <ClientInit>{children}</ClientInit>
+    </Provider>
+  );
 }

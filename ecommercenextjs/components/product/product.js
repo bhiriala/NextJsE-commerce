@@ -1,10 +1,10 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { addItem } from "@/store/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, createCart } from "@/store/cartSlice"; // adapte le chemin si besoin
 
 export default function Product(props) {
   const { prod, img } = props;
@@ -12,24 +12,51 @@ export default function Product(props) {
   const Tag = pathname === "/cart" ? "h3" : "h2";
 
   const dispatch = useDispatch();
+  const storeCartId = useSelector((s) => s.cart?.cartId);
   const [added, setAdded] = useState(false);
+  const timeoutRef = useRef(null);
 
-  const handleAddToCart = useCallback(() => {
+  useEffect(() => {
+    return () => {
+      // cleanup si le composant est démonté pendant le timeout
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const handleAddToCart = useCallback(async () => {
     if (!prod || !prod.id) return;
+
+    // construire l'item dans le format attendu par la slice/backend
     const item = {
       id: prod.id,
       name: prod.name,
       price: Number(prod.price) || 0,
-      quantity: 1,
+      qty: 1, // attention : la slice utilise `qty`
       imageName: prod.imageName || "",
-      discountRate:Number(prod.discountRate) || 0
+      discountRate: Number(prod.discountRate || 0),
     };
 
-    dispatch(addItem(item));
-    setAdded(true);
-    const t = setTimeout(() => setAdded(false), 1500);
-    return () => clearTimeout(t);
-  }, [dispatch, prod]);
+    try {
+      // récupérer cartId soit depuis le store soit depuis localStorage
+      let cartId = storeCartId || (typeof window !== "undefined" ? localStorage.getItem("cartId") : null);
+
+      // si pas de cartId, créer le panier puis utiliser l'id retourné
+      if (!cartId) {
+        const createResult = await dispatch(createCart()).unwrap(); // createCart retourne l'id dans notre slice
+        cartId = createResult;
+      }
+
+      // dispatch addToCart avec l'objet attendu { cartId, item }
+      await dispatch(addToCart({ cartId, item })).unwrap();
+
+      // succès : feedback UI
+      setAdded(true);
+      timeoutRef.current = setTimeout(() => setAdded(false), 1500);
+    } catch (err) {
+      console.error("Erreur ajout au panier :", err);
+      // tu peux afficher une notification utilisateur ici
+    }
+  }, [dispatch, prod, storeCartId]);
 
   return (
     <div className="single-shop-product">

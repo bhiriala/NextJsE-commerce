@@ -1,14 +1,23 @@
 // components/addToCartBotton/addToCartBotton.jsx
 "use client";
 
-import { useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { addItem } from "@/store/cartSlice";
+import { useState, useCallback, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, createCart } from "@/store/cartSlice"; // adapte le chemin si besoin
 
 export default function AddToCartButton({ product, img = null }) {
   const dispatch = useDispatch();
+  const storeCartId = useSelector((s) => s.cart?.cartId);
+
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const increment = useCallback(() => {
     setQty((q) => q + 1);
@@ -23,26 +32,41 @@ export default function AddToCartButton({ product, img = null }) {
     setQty(v >= 1 ? Math.floor(v) : 1);
   }, []);
 
-  const handleAdd = useCallback(() => {
+  const handleAdd = useCallback(async () => {
     if (!product || !product.id) return;
 
-    // Préparer l'objet item (garder prix original + discountRate)
+    // Construire l'item dans le format attendu par la slice/backend
     const item = {
       id: product.id,
       name: product.name,
       price: Number(product.price) || 0,
       discountRate: Number(product.discountRate ?? 0),
-      quantity: Number(qty) || 1,
+      qty: Number(qty) || 1, // <-- important : `qty` et non `quantity`
       imageName: product.imageName || "",
     };
 
-    dispatch(addItem(item));
+    try {
+      // Récupérer cartId depuis le store ou localStorage
+      let cartId = storeCartId || (typeof window !== "undefined" ? localStorage.getItem("cartId") : null);
 
-    // feedback visuel
-    setAdded(true);
-    const t = setTimeout(() => setAdded(false), 1200);
-    return () => clearTimeout(t);
-  }, [dispatch, product, qty]);
+      // Si pas de cartId, créer le panier
+      if (!cartId) {
+        // createCart thunk retourne l'id (dans notre slice on return result.id)
+        const createdId = await dispatch(createCart()).unwrap();
+        cartId = createdId;
+      }
+
+      // Dispatch addToCart avec la signature { cartId, item }
+      await dispatch(addToCart({ cartId, item })).unwrap();
+
+      // Feedback UI
+      setAdded(true);
+      timeoutRef.current = setTimeout(() => setAdded(false), 1200);
+    } catch (err) {
+      console.error("Erreur ajout au panier :", err);
+      // TODO: afficher notification utilisateur si tu veux
+    }
+  }, [dispatch, product, qty, storeCartId]);
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8 }}>
