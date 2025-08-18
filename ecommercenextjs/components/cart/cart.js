@@ -2,6 +2,7 @@
 import { useSelector } from "react-redux";
 import styles from "./cart.module.css";
 import { FaShoppingCart } from "react-icons/fa";
+import Link from "next/link";
 
 export default function Cart() {
   const items = useSelector((state) => state.cart?.cartData?.items ?? []);
@@ -18,13 +19,15 @@ export default function Cart() {
   const totalItems = items.reduce((acc, item) => acc + Number(item.qty ?? 1), 0);
 
   return (
-    <div className={styles.cartContainer}>
-      <span>
-        Cart : <span className={styles.amount}>{totalAmountStr} $</span>
-      </span>
+    <Link href="/cart">
+      <div className={styles.cartContainer}>
+        <span>
+          Cart : <span className={styles.amount}>{totalAmountStr} $</span>
+        </span>
 
-      <FaShoppingCart className={styles.icon} />
-      <span className={styles.badge}>{totalItems}</span>
-    </div>
+        <FaShoppingCart className={styles.icon} />
+        <span className={styles.badge}>{totalItems}</span>
+      </div>
+    </Link>
   );
 }

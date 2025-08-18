@@ -6,6 +6,7 @@ import CartTableItem from "./cartTableItem";
 
 export default function CartTable() {
   const items = useSelector((state) => state.cart?.cartData?.items ?? []);
+  console.log("CartTable items:", items);
 
   if (!items || items.length === 0) {
     return (

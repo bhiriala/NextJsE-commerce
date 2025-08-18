@@ -3,8 +3,12 @@
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { updateItemQuantity, removeItemFromCart, createCart } from "@/store/cartSlice";
+import Image from "next/image";
 
 export default function CartTableItem({ item }) {
+  const i = item.imageName.indexOf("-");
+  const substring = i !== -1 ? item.imageName.slice(0, i) : "";
+  const imgSrc = `/assets/produts-img/${substring}/${item.imageName}`;
   const dispatch = useDispatch();
   const storeCartId = useSelector((state) => state.cart?.cartId);
   const itemInStore = useSelector((state) =>
@@ -76,12 +80,12 @@ export default function CartTableItem({ item }) {
 
       <td className="product-thumbnail">
         <Link href={`/productDetails/${item.id}`}>
-          <img
-            width={145}
-            height={145}
+          <Image
+            width={90}
+            height={90}
             alt={item.name}
             className="shop_thumbnail"
-            src={item.imageName ?? "/placeholder.png"}
+            src={imgSrc}
             style={{ objectFit: "cover" }}
           />
         </Link>
