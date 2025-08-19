@@ -15,14 +15,11 @@ export default function ClientSearchResult({ products }) {
   }, [products, router]);
   console.log(products)
 
-  if (products.length === 0) {
-    return <p>Aucun produit disponible.</p>;
-  }
 
   return (
     <div className="container">
       <div className="gridProduct">
-        {products.map((prod, index) => {
+        {products.length === 1 ? null : products.map((prod, index) => {
           const i = prod.imageName.indexOf("-");
           const substring = i !== -1 ? prod.imageName.slice(0, i) : "";
           const imgName = `/assets/produts-img/${substring}/${prod.imageName}`;
