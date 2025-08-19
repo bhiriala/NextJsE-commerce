@@ -1,0 +1,75 @@
+.container {
+  max-width: 450px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.title {
+  color: #2a5db0;
+  font-size: 18px;
+  margin: 0 0 10px 0;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.formRowWide {
+  width: 100%;
+}
+
+.formRowFirst {
+  /* si tu veux les inputs côte à côte, tu peux override ici */
+}
+
+.formRowLast {
+  /* idem */
+}
+
+.label {
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #222;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: #aaa;
+}
+
+.error {
+  color: rgb(223, 42, 42);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.required {
+  color: rgb(44, 43, 43);
+  margin-left: 4px;
+}
+
+/* petites améliorations responsives */
+@media (max-width: 600px) {
+  .container {
+    padding: 0 10px;
+  }
+  .title {
+    font-size: 16px;
+  }
+  .input {
+    font-size: 13px;
+    padding: 8px;
+  }
+}

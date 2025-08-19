@@ -1,0 +1,85 @@
+/* wrapper: slight offset like in original (3.5rem) */
+.container {
+  margin-left: 3.5rem;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+/* headings */
+.heading {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+.title {
+  color: #2a5db0;
+  font-size: 18px;
+  margin: 8px 0 10px;
+}
+
+/* checkbox label style */
+.checkboxLabel {
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* layout for shipping address */
+.shippingAddress {
+  margin-top: 12px;
+  padding-top: 6px;
+}
+
+/* form rows */
+.formRow {
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+.formRowWide {
+  width: 100%;
+}
+.formRowFirst { /* placeholder if you want side-by-side on desktop */ }
+.formRowLast { /* placeholder */ }
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: #aaa;
+}
+
+.error {
+  color: rgb(223, 42, 42);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.required {
+  color: rgb(44, 43, 43);
+  margin-left: 4px;
+}
+
+/* responsive: remove left offset on small screens */
+@media (max-width: 720px) {
+  .container { margin-left: 0; padding: 0 12px; }
+  .formRow { max-width: 100%; }
+}

@@ -383,6 +383,179 @@ div.cart-collaterals ul.products li.product .price {
 }
 .single-product-area .zigzag-bottom {background-color: #f4f4f4}
 
+/* === ORDER SUMMARY (table) === */
+#order_review {
+  margin: 0 0 24px 0;
+}
+
+#order_review h3 {
+  color: #2a5db0;
+  margin: 0 0 12px 0;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.shop_table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-family: inherit;
+  box-sizing: border-box;
+  margin-bottom: 18px;
+  border: 1px solid #e9e9e9;
+}
+
+/* header */
+.shop_table thead th {
+  background: #f7f7f7;
+  padding: 18px;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: #222;
+  letter-spacing: 0.6px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+/* body rows */
+.shop_table tbody td {
+  padding: 16px 18px;
+  border-top: 1px solid #f1f1f1;
+  color: #333;
+  vertical-align: middle;
+}
+
+/* align product text left, totals right */
+.shop_table tbody td:first-child { text-align: left; }
+.shop_table tbody td:last-child { text-align: right; }
+
+/* footer rows */
+.shop_table tfoot td,
+.shop_table tfoot th {
+  padding: 14px 18px;
+  border-top: 1px solid #f1f1f1;
+  background: #fafafa;
+  text-align: right;
+}
+
+.shop_table tfoot th {
+  text-align: left;
+  font-weight: 700;
+  color: #222;
+}
+
+/* order total emphasis */
+.shop_table tfoot tr:last-child th,
+.shop_table tfoot tr:last-child td {
+  background: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  color: #111;
+}
+
+/* small devices */
+@media (max-width: 720px) {
+  .shop_table thead { display: none; }
+  .shop_table, .shop_table tbody, .shop_table tr, .shop_table td { display: block; width: 100%; }
+  .shop_table tbody td { text-align: left; padding: 12px; border: none; border-bottom: 1px solid #eee; }
+}
+
+/* === PAYMENT METHOD (radio list) === */
+#payment {
+  margin-top: 24px;
+}
+
+#payment h3 {
+  color: #2a5db0;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* reset list */
+.payment_methods { list-style: none; padding: 0; margin: 0; }
+
+/* each payment row: label on left, radio on right */
+.payment_methods li {
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+/* force label on the left column and input on the right */
+.payment_methods li > label { grid-column: 1; margin: 0; color: #222; font-weight: 600; }
+.payment_methods li > input[type="radio"] { grid-column: 2; justify-self: center; width: 18px; height: 18px; }
+
+/* payment detail box (shown conditionally in React) */
+.payment_box {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #f1f1f1;
+  background: #fafafa;
+  color: #444;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+/* PayPal logos inside label (scale and align) */
+.payment_methods img {
+  height: 22px;
+  vertical-align: middle;
+  margin-left: 8px;
+  display: inline-block;
+}
+
+/* small helper for the "What is PayPal?" link */
+.payment_methods .about_paypal {
+  margin-left: 12px;
+  font-size: 13px;
+  color: #2a5db0;
+  text-decoration: none;
+}
+
+/* === PLACE ORDER BUTTON === */
+.form-row.place-order {
+  margin-top: 18px;
+}
+
+/* white button with black border like in your screenshot */
+.form-row.place-order .button.alt {
+  display: block;
+  width: 100%;
+  padding: 12px 18px;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 2px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* hover / focus */
+.form-row.place-order .button.alt:hover,
+.form-row.place-order .button.alt:focus {
+  background: #fafafa;
+  box-shadow: none;
+}
+
+/* disabled look */
+.form-row.place-order .button.alt[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* tiny responsive tweak */
+@media (max-width: 520px) {
+  .payment_methods li { grid-template-columns: 1fr 40px; }
+  .payment_methods img { height: 18px; }
+}
+
 
 /* table */
 .shop_table.cart {
@@ -616,6 +789,8 @@ div.cart-collaterals ul.products li.product .price {
   padding: 80px 0 130px;
   margin-top: -1.7rem;
 }
+
+
 
 .single-sidebar li {
     border-bottom: 1px solid #e9e7e7;
