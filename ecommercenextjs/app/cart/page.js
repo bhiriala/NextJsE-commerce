@@ -14,8 +14,8 @@ function Cart() {
     { id: 2004, imageName: "/assets/produts-img/samsung/samsung-galaxy-a10s.jpg", price: 455, name: "Samsung Galaxy A10s", discountRate: 17 },
   ];
 
-  if (loading) return <p>Chargement du panier...</p>;
-  if (error) return <p>Erreur lors du chargement du panier : {String(error)}</p>;
+  // if (loading) return <p>Chargement du panier...</p>;
+  // if (error) return <p>Erreur lors du chargement du panier : {String(error)}</p>;
 
   if (!cartData) return <p>Votre panier est vide ou en cours de création...</p>;
 

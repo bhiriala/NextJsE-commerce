@@ -57,7 +57,6 @@ export default function BillingDetails() {
         )}
       </div>
 
-      {/* Les autres champs : même principe (div au lieu de p) */}
       <div className={`${styles.formRow} ${styles.formRowWide}`}>
         <label className={styles.label}>Company Name</label>
         <input
@@ -80,7 +79,7 @@ export default function BillingDetails() {
         )}
       </div>
 
-      <p className={`${styles.formRow} ${styles.formRowWide}`}>
+      <div className={`${styles.formRow} ${styles.formRowWide}`}>
         <label className={styles.label}>
           City <abbr title="required" className={styles.required}>*</abbr>
         </label>
@@ -91,9 +90,9 @@ export default function BillingDetails() {
         {errors.billingAddress?.city && (
           <p className={styles.error}>{errors.billingAddress.city.message}</p>
         )}
-      </p>
+      </div>
 
-      <p className={`${styles.formRow} ${styles.formRowWide}`}>
+      <div className={`${styles.formRow} ${styles.formRowWide}`}>
         <label className={styles.label}>
           County <abbr title="required" className={styles.required}>*</abbr>
         </label>
@@ -104,9 +103,9 @@ export default function BillingDetails() {
         {errors.billingAddress?.county && (
           <p className={styles.error}>{errors.billingAddress.county.message}</p>
         )}
-      </p>
+      </div>
 
-      <p className={`${styles.formRow} ${styles.formRowWide}`}>
+      <div className={`${styles.formRow} ${styles.formRowWide}`}>
         <label className={styles.label}>
           Zip Code <abbr title="required" className={styles.required}>*</abbr>
         </label>
@@ -117,9 +116,9 @@ export default function BillingDetails() {
         {errors.billingAddress?.zipCode && (
           <p className={styles.error}>{errors.billingAddress.zipCode.message}</p>
         )}
-      </p>
+      </div>
 
-      <p className={`${styles.formRow} ${styles.formRowWide}`}>
+      <div className={`${styles.formRow} ${styles.formRowWide}`}>
         <label className={styles.label}>
           Email <abbr title="required" className={styles.required}>*</abbr>
         </label>
@@ -133,9 +132,9 @@ export default function BillingDetails() {
         {errors.customer?.email && (
           <p className={styles.error}>{errors.customer.email.message}</p>
         )}
-      </p>
+      </div>
 
-      <p className={`${styles.formRow} ${styles.formRowWide}`}>
+      <div className={`${styles.formRow} ${styles.formRowWide}`}>
         <label className={styles.label}>
           Phone <abbr title="required" className={styles.required}>*</abbr>
         </label>
@@ -149,7 +148,7 @@ export default function BillingDetails() {
         {errors.customer?.phone && (
           <p className={styles.error}>{errors.customer.phone.message}</p>
         )}
-      </p>
+      </div>
     </div>
   );
 }
