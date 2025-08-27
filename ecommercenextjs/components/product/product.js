@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, createCart } from "@/store/cartSlice"; // adapte le chemin si besoin
+import AddToCartButton from "../addToCartBotton/addToCartBotton";
 
 export default function Product(props) {
   const { prod, img } = props;
@@ -86,14 +87,7 @@ export default function Product(props) {
       </div>
 
       <div className={pathname === "/cart" ? "" : "product-option-shop"}>
-        <button
-          type="button"
-          className="add_to_cart_button"
-          onClick={handleAddToCart}
-          disabled={added}
-        >
-          {added ? "Added" : "Add to cart"}
-        </button>
+       <AddToCartButton product={prod} />
       </div>
     </div>
   );

@@ -87,19 +87,7 @@ export default async function ProductDetails({ params }) {
                       <del>${product.price}</del>
                     </div>
                     <form className="cart" >
-                      {/* <div className="quantity">
-                        <input
-                          type="number"
-                          size={4}
-                          className="input-text qty text"
-                          title="Qty"
-                          value={quantity}
-                          min={1}
-                          step={1}
-                          onChange={(e) => setQuantity(Number(e.target.value))}
-                        />
-                      </div> */}
-                      <AddToCartButton product={product} img={imagePath || null} />
+                      <AddToCartButton product={product}/>
                     </form>
 
                     <div className="product-inner-category">

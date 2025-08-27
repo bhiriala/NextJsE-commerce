@@ -1,14 +1,15 @@
 // components/addToCartBotton/addToCartBotton.jsx
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, use } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, createCart } from "@/store/cartSlice"; // adapte le chemin si besoin
+import { usePathname } from "next/navigation";
 
-export default function AddToCartButton({ product, img = null }) {
+export default function AddToCartButton({ product }) {
   const dispatch = useDispatch();
   const storeCartId = useSelector((s) => s.cart?.cartId);
-
+  const pathname = usePathname();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const timeoutRef = useRef(null);
@@ -70,34 +71,39 @@ export default function AddToCartButton({ product, img = null }) {
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <button
-          type="button"
-          onClick={decrement}
-          aria-label="Diminuer la quantité"
-          style={{ padding: "6px 10px", cursor: "pointer" }}
-        >
-          −
-        </button>
+      {pathname.includes("productDetails") && (
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <button
+            type="button"
+            onClick={decrement}
+            aria-label="Diminuer la quantité"
+            style={{ padding: "6px 10px", cursor: "pointer" }}
+          >
+            −
+          </button>
+        
+          <input
+            type="number"
+            min={1}
+            value={qty}
+            onChange={onChangeQty}
+            aria-label="Quantité"
+            style={{ width: 64, textAlign: "center", padding: "6px 8px" }}
+          />
+        
 
-        <input
-          type="number"
-          min={1}
-          value={qty}
-          onChange={onChangeQty}
-          aria-label="Quantité"
-          style={{ width: 64, textAlign: "center", padding: "6px 8px" }}
-        />
+          
 
-        <button
-          type="button"
-          onClick={increment}
-          aria-label="Augmenter la quantité"
-          style={{ padding: "6px 10px", cursor: "pointer" }}
-        >
-          +
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={increment}
+            aria-label="Augmenter la quantité"
+            style={{ padding: "6px 10px", cursor: "pointer" }}
+          >
+            +
+          </button>
+        </div>
+      )}
 
       <button
         type="button"
