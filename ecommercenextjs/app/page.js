@@ -1,6 +1,5 @@
 import Brands from "@/components/brands/brands";
 import CarrouselSwiper from "@/components/carrouselSwiper/carrouselSwiper";
-import NavigationBar from "@/components/navigationBar/navigationBar";
 import ProductWidgetArea from "@/components/ProductWidgetArea/ProductWidgetArea";
 import Promo from "@/components/promo/promo";
 export default function HomePage() {

@@ -11,17 +11,13 @@ function ClientInit({ children }) {
   const cartId = useSelector((s) => s.cart.cartId);
 
   useEffect(() => {
-    // lecture sûre du localStorage côté client
     const storedCartId = typeof window !== "undefined" ? localStorage.getItem("cartId") : null;
 
-    // Priorité : si on a un cartId dans le store utiliser celui-là (ex : après createCart)
     if (!storedCartId && !cartId) {
       dispatch(createCart());
     } else if (storedCartId && !cartId) {
-      // on a un id en localStorage -> récupérer le panier
       dispatch(fetchCartData(storedCartId));
     } else if (cartId) {
-      // si cartId déjà dans le store -> refresh des données
       dispatch(fetchCartData(cartId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -33,7 +33,7 @@ export default function ShippingDetails({ shipDifferent, setShipDifferent }) {
             </label>
             <select
               {...register("shippingAddress.civility", {
-                required: shipDifferent ? "Civility is required" : false,
+                required: "Civility is required",
               })}
               className={styles.input}
             >
@@ -53,7 +53,7 @@ export default function ShippingDetails({ shipDifferent, setShipDifferent }) {
             </label>
             <input
               {...register("shippingAddress.firstName", {
-                required: shipDifferent ? "First Name is required" : false,
+                required: "First Name is required",
               })}
               className={styles.input}
             />
@@ -68,7 +68,7 @@ export default function ShippingDetails({ shipDifferent, setShipDifferent }) {
             </label>
             <input
               {...register("shippingAddress.lastName", {
-                required: shipDifferent ? "Last Name is required" : false,
+                required: "Last Name is required",
               })}
               className={styles.input}
             />
@@ -83,7 +83,7 @@ export default function ShippingDetails({ shipDifferent, setShipDifferent }) {
             </label>
             <input
               {...register("shippingAddress.street", {
-                required: shipDifferent ? "Street Address is required" : false,
+                required: "Street Address is required",
               })}
               className={styles.input}
             />
@@ -98,7 +98,7 @@ export default function ShippingDetails({ shipDifferent, setShipDifferent }) {
             </label>
             <input
               {...register("shippingAddress.city", {
-                required: shipDifferent ? "City is required" : false,
+                required: "City is required",
               })}
               className={styles.input}
             />
@@ -113,7 +113,7 @@ export default function ShippingDetails({ shipDifferent, setShipDifferent }) {
             </label>
             <input
               {...register("shippingAddress.zipCode", {
-                required: shipDifferent ? "Zip Code is required" : false,
+                required: "Zip Code is required",
               })}
               className={styles.input}
             />

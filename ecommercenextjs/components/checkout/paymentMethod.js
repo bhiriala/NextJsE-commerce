@@ -1,5 +1,7 @@
 "use client";
+import Link from "next/link";
 import { useFormContext } from "react-hook-form";
+import Image from "next/image";
 
 export default function PaymentMethod() {
   const {
@@ -30,7 +32,7 @@ export default function PaymentMethod() {
           {selectedPayment === "bank_transfer" && (
             <div className="payment_box payment_method_bacs" style={{ marginTop: 8 }}>
               <p>
-                Make your payment directly into our bank account. Your order won’t be shipped
+                Make your payment directly into our bank account. Your order won`t be shipped
                 until the funds have cleared.
               </p>
             </div>
@@ -66,12 +68,13 @@ export default function PaymentMethod() {
           />
           <label htmlFor="payment_method_paypal" style={{ marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 8 }}>
             <span>PayPal</span>
-            <img
+            <Image
               alt="PayPal Acceptance Mark"
               src="https://www.paypalobjects.com/webstatic/mktg/Logo/AM_mc_vs_ms_ae_UK.png"
-              style={{ height: 20, display: "inline-block" }}
+              width={50}
+              height={50}
             />
-            <a
+            <Link
               title="What is PayPal?"
               className="about_paypal"
               href="https://www.paypal.com/gb/webapps/mpp/paypal-popup"
@@ -80,7 +83,7 @@ export default function PaymentMethod() {
               style={{ marginLeft: 8, fontSize: 12 }}
             >
               What is PayPal?
-            </a>
+            </Link>
           </label>
 
           {selectedPayment === "paypal" && (
@@ -91,7 +94,6 @@ export default function PaymentMethod() {
         </li>
       </ul>
 
-      {/* message d'erreur global pour le champ paymentMethod */}
       {errors.paymentMethod && <p className="error" style={{ color: "rgb(223,42,42)", marginTop: 8 }}>{errors.paymentMethod.message}</p>}
     </div>
   );

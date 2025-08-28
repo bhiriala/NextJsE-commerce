@@ -6,18 +6,14 @@ import CartTable from "@/components/cart/cartTable";
 import Product from "@/components/product/product";
 
 function Cart() {
-  const { cartData, loading, error } = useSelector((state) => state.cart || {});
-  console.log("cartooooo",cartData)
+  const { cartData} = useSelector((state) => state.cart || {});
 
   const products = [
     { id: 1022, imageName: "/assets/produts-img/apple/apple-iphone-5s-ofic.jpg", price: 452, name: "Apple iPhone 5s", discountRate: 22 },
     { id: 2004, imageName: "/assets/produts-img/samsung/samsung-galaxy-a10s.jpg", price: 455, name: "Samsung Galaxy A10s", discountRate: 17 },
   ];
 
-  // if (loading) return <p>Chargement du panier...</p>;
-  // if (error) return <p>Erreur lors du chargement du panier : {String(error)}</p>;
-
-  if (!cartData) return <p>Votre panier est vide ou en cours de création...</p>;
+  if (!cartData) return <p>Your cart is empty or being created...</p>;
 
   return (
     <>
@@ -26,7 +22,6 @@ function Cart() {
         <div className="container">
               <div className="product-content-right">
                 <div className="woocommerce">
-                  {/* On passe cartData à CartTable (adapter selon la signature de ton composant CartTable) */}
                   <CartTable cart={cartData} />
 
                   <div className="cart-collaterals">
@@ -40,8 +35,6 @@ function Cart() {
                         ))}
                       </ul>
                     </div>
-
-                    {/* CartTotal attend probablement total / subTotal / tax — on lit depuis cartData */}
                     <CartTotal
                       total={cartData?.total ?? 0}
                       subTotal={cartData?.subTotal ?? cartData?.total ?? 0}

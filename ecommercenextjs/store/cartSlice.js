@@ -1,9 +1,6 @@
-// /Redux/cartSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-
-// Helper: safe access localStorage
 const getLocal = (key) => {
   if (typeof window === "undefined") return null;
   try { return localStorage.getItem(key); } catch { return null; }
@@ -25,7 +22,6 @@ export const createCart = createAsyncThunk(
       if (!response.ok) throw new Error("Erreur lors de la création du panier");
       const result = await response.json();
 
-      // only on client
       setLocal("cartId", result.id);
       setLocal("cart", JSON.stringify(result));
       if (!getLocal("RecentlyViewed")) setLocal("RecentlyViewed", JSON.stringify([]));
@@ -41,7 +37,6 @@ export const fetchCartData = createAsyncThunk(
   "cart/fetchCartData",
   async (cartId, { rejectWithValue }) => {
     try {
-      // prefer param cartId, otherwise try localStorage
       const id = cartId || (getLocal("cartId") ? getLocal("cartId") : null);
       if (!id) throw new Error("cartId manquant");
 
@@ -49,7 +44,6 @@ export const fetchCartData = createAsyncThunk(
       if (!response.ok) throw new Error("Erreur lors du chargement du panier");
       const data = await response.json();
 
-      // sync localStorage
       setLocal("cart", JSON.stringify(data));
       setLocal("cartId", id);
 
@@ -161,25 +155,21 @@ const cartSlice = createSlice({
     error: null,
   },
   reducers: {
-    // action utile si tu veux initialiser depuis client sans thunk
     setCartFromLocal(state, action) {
       state.cartId = action.payload?.cartId ?? state.cartId;
       state.cartData = action.payload?.cartData ?? state.cartData;
     },
   },
   extraReducers: (builder) => {
-    // createCart
     builder
       .addCase(createCart.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(createCart.fulfilled, (state, action) => { state.loading = false; state.cartId = action.payload; })
       .addCase(createCart.rejected, (state, action) => { state.loading = false; state.error = action.payload || action.error?.message; })
 
-      // fetchCartData
       .addCase(fetchCartData.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(fetchCartData.fulfilled, (state, action) => { state.loading = false; state.cartData = action.payload; state.error = null; state.cartId = action.payload?.id ?? state.cartId; })
       .addCase(fetchCartData.rejected, (state, action) => { state.loading = false; state.error = action.payload || action.error?.message; })
 
-      // update / add / remove
       .addCase(updateItemQuantity.pending, (state) => { state.loading = true; state.error = null; })
       .addCase(updateItemQuantity.fulfilled, (state, action) => { state.loading = false; state.cartData = action.payload; })
       .addCase(updateItemQuantity.rejected, (state, action) => { state.loading = false; state.error = action.payload || action.error?.message; })

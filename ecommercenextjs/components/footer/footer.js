@@ -30,7 +30,7 @@ export default function Footer() {
         <div className={styles.column} style={{marginRight:"-7rem"}}>
           <h3 className={styles.title}>Newsletter</h3>
           <p>
-            Sign up to our newsletter and get exclusive deals you won't find
+            Sign up to our newsletter and get exclusive deals you won`t find
             anywhere else straight to your inbox!
           </p>
           <form className={styles.newsletterForm}>

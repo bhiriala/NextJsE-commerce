@@ -44,7 +44,7 @@ export default async function ProductList({ params }) {
                                 );
                             })
                         ) : (
-                            <p>Aucun produit disponible.</p>
+                            <p>No products available.</p>
                         )}
                     </div>
                 </div>

@@ -21,13 +21,6 @@
   width: 100%;
 }
 
-.formRowFirst {
-  /* si tu veux les inputs côte à côte, tu peux override ici */
-}
-
-.formRowLast {
-  /* idem */
-}
 
 .label {
   font-weight: 700;

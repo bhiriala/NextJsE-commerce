@@ -35,7 +35,7 @@ export default function CartTableItem({ item }) {
       const cartId = await ensureCartId();
       await dispatch(updateItemQuantity({ cartId, itemId: item.id, qty: qty + 1 })).unwrap();
     } catch (err) {
-      console.error("Impossible d'augmenter la quantité :", err);
+      console.error("Unable to increase the quantity :", err);
     }
   };
 
@@ -45,7 +45,7 @@ export default function CartTableItem({ item }) {
       const cartId = await ensureCartId();
       await dispatch(updateItemQuantity({ cartId, itemId: item.id, qty: qty - 1 })).unwrap();
     } catch (err) {
-      console.error("Impossible de diminuer la quantité :", err);
+      console.error("Unable to decrease the quantity :", err);
     }
   };
 
@@ -54,7 +54,7 @@ export default function CartTableItem({ item }) {
       const cartId = await ensureCartId();
       await dispatch(removeItemFromCart({ cartId, itemId: item.id })).unwrap();
     } catch (err) {
-      console.error("Impossible de supprimer l'article :", err);
+      console.error("Unable to delete article :", err);
     }
   };
 
@@ -72,9 +72,9 @@ export default function CartTableItem({ item }) {
             padding: "6px 8px",
             cursor: "pointer",
           }}
-          aria-label="Supprimer l'article"
+          aria-label="Delete article"
         >
-          ×
+          x
         </button>
       </td>
 
@@ -104,7 +104,7 @@ export default function CartTableItem({ item }) {
           className="quantity buttons_added"
           style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
         >
-          <button type="button" className="minus" onClick={handleDecrease} aria-label="Diminuer quantité">
+          <button type="button" className="minus" onClick={handleDecrease} aria-label="Decrease quantity">
             -
           </button>
 
@@ -116,11 +116,11 @@ export default function CartTableItem({ item }) {
             min={1}
             step={1}
             readOnly
-            aria-label="Quantité"
+            aria-label="Quantity"
             style={{ width: 60, textAlign: "center" }}
           />
 
-          <button type="button" className="plus" onClick={handleIncrease} aria-label="Augmenter quantité">
+          <button type="button" className="plus" onClick={handleIncrease} aria-label="Increase quantity">
             +
           </button>
         </div>

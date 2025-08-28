@@ -25,7 +25,7 @@ export default function OrderSummary() {
     return (
       <div id="order_review">
         <h3>Your Order</h3>
-        <p>Votre commande est vide.</p>
+        <p>Your order is empty</p>
       </div>
     );
   }
@@ -52,7 +52,7 @@ export default function OrderSummary() {
             return (
               <tr key={String(item.id)}>
                 <td>
-                  {item.name} × {qty}
+                  {item.name} x {qty}
                 </td>
                 <td style={{ textAlign: "right" }}>${fmt(lineTotal)}</td>
               </tr>

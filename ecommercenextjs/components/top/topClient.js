@@ -78,14 +78,6 @@ export default function TopClient({ name, listProd: initialList }) {
               <h2>
                 <Link href={`/productDetails/${prod.id}`}>{prod.name}</Link>
 
-                {/* <Link
-                        href={`/productDetails/${props.prod.id}`}
-                        style={{ color: pathname === "/cart" ? "black" : "" }}
-                        onClick={() => addRecentlyViewed(props.prod)}
-                    >
-                        {props.prod.name}
-                    </Link> */}
-
               </h2>
               <div className="product-wid-rating">
                 {Array.from({ length: prod.review }).map((_, i) => (

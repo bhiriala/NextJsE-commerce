@@ -11,8 +11,8 @@ export default function CartTable() {
   if (!items || items.length === 0) {
     return (
       <div className="cart-empty">
-        <p>Votre panier est vide.</p>
-        <Link href="/">Continuer vos achats</Link>
+        <p>Your cart is empty.</p>
+        <Link href="/">Continue shopping</Link>
       </div>
     );
   }

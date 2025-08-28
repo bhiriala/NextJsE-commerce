@@ -1,4 +1,3 @@
-// components/addToCartBotton/addToCartBotton.jsx
 "use client";
 
 import { useState, useCallback, useRef, useEffect, use } from "react";
@@ -36,41 +35,31 @@ export default function AddToCartButton({ product }) {
   const handleAdd = useCallback(async () => {
     if (!product || !product.id) return;
 
-    // Construire l'item dans le format attendu par la slice/backend
     const item = {
       id: product.id,
       name: product.name,
       price: Number(product.price) || 0,
       discountRate: Number(product.discountRate ?? 0),
-      qty: Number(qty) || 1, // <-- important : `qty` et non `quantity`
+      qty: Number(qty) || 1, 
       imageName: product.imageName || "",
     };
 
     try {
-      // Récupérer cartId depuis le store ou localStorage
       let cartId = storeCartId || (typeof window !== "undefined" ? localStorage.getItem("cartId") : null);
-
-      // Si pas de cartId, créer le panier
       if (!cartId) {
-        // createCart thunk retourne l'id (dans notre slice on return result.id)
         const createdId = await dispatch(createCart()).unwrap();
         cartId = createdId;
       }
-
-      // Dispatch addToCart avec la signature { cartId, item }
       await dispatch(addToCart({ cartId, item })).unwrap();
-
-      // Feedback UI
       setAdded(true);
       timeoutRef.current = setTimeout(() => setAdded(false), 1200);
     } catch (err) {
       console.error("Erreur ajout au panier :", err);
-      // TODO: afficher notification utilisateur si tu veux
     }
   }, [dispatch, product, qty, storeCartId]);
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 12 }}>
       {pathname.includes("productDetails") && (
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <button
@@ -112,7 +101,7 @@ export default function AddToCartButton({ product }) {
         disabled={added}
         style={{ padding: "8px 12px", cursor: added ? "default" : "pointer" }}
       >
-        {added ? "Ajouté" : "Add to cart"}
+        {added ? "Added" : "Add to cart"}
       </button>
     </div>
   );
