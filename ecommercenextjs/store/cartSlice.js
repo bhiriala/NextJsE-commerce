@@ -25,8 +25,7 @@ export const createCart = createAsyncThunk(
       setLocal("cartId", result.id);
       setLocal("cart", JSON.stringify(result));
       if (!getLocal("RecentlyViewed")) setLocal("RecentlyViewed", JSON.stringify([]));
-
-      return result.id;
+      return result;
     } catch (err) {
       return rejectWithValue(err.message || "Erreur createCart");
     }
@@ -163,7 +162,7 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createCart.pending, (state) => { state.loading = true; state.error = null; })
-      .addCase(createCart.fulfilled, (state, action) => { state.loading = false; state.cartId = action.payload; })
+      .addCase(createCart.fulfilled, (state, action) => { state.loading = false; state.cartId = action.payload?.id ?? state.cartId; state.cartData = action.payload ?? state.cartData;})
       .addCase(createCart.rejected, (state, action) => { state.loading = false; state.error = action.payload || action.error?.message; })
 
       .addCase(fetchCartData.pending, (state) => { state.loading = true; state.error = null; })

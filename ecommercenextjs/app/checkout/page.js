@@ -95,18 +95,15 @@ export default function CheckoutPage() {
       },
       paymentMethod: "",
     },
-    shouldUnregister: true, // important pour les champs conditionnels
+    shouldUnregister: true, 
   });
 
   const dispatch = useDispatch();
   const router = useRouter();
   const cartData = useSelector((state) => state.cart?.cartData ?? null);
 
-  const onSubmit = async (data) => {
-  if (!cartData) {
-    console.error("Pas de panier disponible");
-    return;
-  }
+ const onSubmit = async (data) => {
+  if (!cartData) return console.error("Pas de panier disponible");
 
   const orderData = {
     total: cartData.total ?? 0,
@@ -116,17 +113,23 @@ export default function CheckoutPage() {
     customer: {
       email: data.customer?.email ?? "",
       phone: data.customer?.phone ?? "",
-      billingAddress: { ...data.billingAddress },
+      billingAddress: {
+        ...data.billingAddress,
+      },
       shippingAddress: shipDifferent ? { ...data.shippingAddress } : null,
     },
     paymentMethod: data.paymentMethod,
   };
 
   try {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    const API_URL =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
     const response = await fetch(`${API_URL}/orders`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(orderData),
     });
 
@@ -134,41 +137,24 @@ export default function CheckoutPage() {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    // Marquer le succès (utile pour la page de confirmation)
     if (typeof window !== "undefined") {
       localStorage.setItem("orderSuccess", "true");
+      localStorage.removeItem("cartId");
+      localStorage.removeItem("cart");
     }
 
-    // --- Créer un nouveau panier et hydrater le store ---
     try {
-      // createCart() doit retourner l'id du nouveau panier (comme dans ta slice)
-      const newCartId = await dispatch(createCart()).unwrap();
-
-      // fetchCartData va remplir cartData dans le store (et mettre à jour localStorage)
-      try {
-        await dispatch(fetchCartData(newCartId)).unwrap();
-      } catch (fetchErr) {
-        // Si fetch échoue, on a quand même un newCartId en localStorage (createCart l'a mis),
-        // mais cartData côté Redux peut rester null — log pour debug
-        console.warn("fetchCartData après createCart a échoué :", fetchErr);
-      }
-
-      // Notifier autres onglets (optionnel)
-      try { localStorage.setItem("cart-updated", Date.now().toString()); } catch (e) { /* ignore */ }
-
-    } catch (createErr) {
-      console.warn("createCart après commande a échoué :", createErr);
-      // Même si createCart échoue, on continue la redirection, mais l'UI peut rester avec l'ancien cart.
+      await dispatch(createCart()).unwrap();
+    } catch (err) {
+      console.warn("createCart après commande a échoué :", err);
     }
 
-    // Rediriger l'utilisateur (vers home ou page de confirmation)
     router.push("/");
-
   } catch (error) {
     console.error("Error submitting order:", error);
-    // afficher notification utilisateur si tu veux
   }
 };
+
 
 
   const onError = (errors) => console.error("Form validation errors:", errors);
